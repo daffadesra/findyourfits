@@ -7,8 +7,8 @@ Link aplikasi PWS : http://daffa-desra-findyourfits.pbp.cs.ui.ac.id/
 ### 1) Jelaskan bagaimana cara kamu mengimplementasikan _checklist_ di atas secara _step-by-step_ (bukan hanya sekadar mengikuti tutorial)
 1. **Pertama-tama, saya membuat folder lokal baru di laptop dengan nama `findyourfits`**. Setelah itu, saya membuat direktori lokal dengan nama yang sama yang kemudian saya inisiasi dengan Git. Di dalam folder tersebut, saya menambahkan file README.md pertama saya yang berisi identitas diri saya. 
 2. **Kedua, saya membuat repositori Github baru bernama "findyourfits" pada akun Github saya.** Pada langkah ini, saya membuat branch utama saya yang saya namakan "main". Kemudian, saya menjalankan perintah `git remote add origin <URL_REPO_SAYA>` untuk menghubungkan repositori lokal saya dengan repositori di Github. Kemudian saya melakukan `add`,`commit`, dan `push` ke repositori saya untuk pertama kalinya.
-3. **Ketiga, saya menginisiasi dan mengaktifkan _Virtual Enviroment_ pada folder `findyourfits` **. 
-4. **Keempat, saya membuat berkas `requirements.txt` di dalam folder `findyourfits` yang berisi:
+3. **Ketiga, saya menginisiasi dan mengaktifkan _Virtual Enviroment_ pada folder `findyourfits`**. 
+4. **Keempat, saya membuat berkas `requirements.txt` di dalam folder `findyourfits`** yang berisi:
 	```
 	django  
 	gunicorn  
@@ -75,7 +75,7 @@ Kemudian, saya mengubah nama branch utama menjadi `main` dengan perintah `git br
 
 
 ### 2) - Buatlah bagan yang berisi  _request client_  ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara  `urls.py`,  `views.py`,  `models.py`, dan berkas  `html`.
-![PBP Tugas 2](https://github.com/user-attachments/assets/62d5de3e-d0b6-49c0-926f-cc6e32ae44d4)
+![PBP Tugas 2](https://github.com/user-attachments/assets/be6e5259-1893-4ad8-9566-5c3ee6985bc2)
 Alur Proses:
 1. User melakukan permintaan HTTP _(HTTP Request)_ berupa URL untuk meminta resource ke framework Django.
 2. Framework Django mencari URL yang diminta user.
