@@ -3,102 +3,41 @@ Ini adalah repositori untuk tugas PBP 2025 milik Daffa Desra Hastiar (2306165490
 
 Link aplikasi PWS : http://daffa-desra-findyourfits.pbp.cs.ui.ac.id/
 
-## **TUGAS 2**
-### 1) Jelaskan bagaimana cara kamu mengimplementasikan _checklist_ di atas secara _step-by-step_ (bukan hanya sekadar mengikuti tutorial)
-1. **Pertama-tama, saya membuat folder lokal baru di laptop dengan nama `findyourfits`**. Setelah itu, saya membuat direktori lokal dengan nama yang sama yang kemudian saya inisiasi dengan Git. Di dalam folder tersebut, saya menambahkan file README.md pertama saya yang berisi identitas diri saya. 
-2. **Kedua, saya membuat repositori Github baru bernama "findyourfits" pada akun Github saya.** Pada langkah ini, saya membuat branch utama saya yang saya namakan "main". Kemudian, saya menjalankan perintah `git remote add origin <URL_REPO_SAYA>` untuk menghubungkan repositori lokal saya dengan repositori di Github. Kemudian saya melakukan `add`,`commit`, dan `push` ke repositori saya untuk pertama kalinya.
-3. **Ketiga, saya menginisiasi dan mengaktifkan _Virtual Enviroment_ pada folder `findyourfits`**. 
-4. **Keempat, saya membuat berkas `requirements.txt` di dalam folder `findyourfits`** yang berisi:
-	```
-	django  
-	gunicorn  
-	whitenoise  
-	psycopg2-binary  
-	requests  
-	urllib3
-	```
-	yang kemudian saya install menggunakan command `pip install -r requirements.txt`. Setelah itu, saya membuat proyek baru dengan nama `findyourfits` dengan command:
-	`django-admin startproject findyourfits .`
-5. **Kelima, saya membuat berkas `.gitignore` dengan isi yang sesuai pada Tutorial 0.** Setelah itu, saya melakukan Git `add`, `commit`, dan `push` ke repositori Github `findyourfits`.
-6. **Keenam, saya melakukan konfigurasi untuk project `findyourfits` pada Pacil Web Service (PWS)**. Pada langkah ini, saya menambahkan project `findyourfits` melalui website **Pacil Web Service (PWS)**. Setelah itu, saya menambahkan `ALLOWED_HOSTS` pada `settings.py` di proyek Django `findyourfits` seperti berikut:
-`ALLOWED_HOSTS  = ["localhost", "127.0.0.1", "daffa-desra-findyourfits.pbp.cs.ui.ac.id"]`
-Kemudian, saya mengubah nama branch utama menjadi `main` dengan perintah `git branch -M main`. Setelah itu, saya melakukan push ke repositori Github dan PWS.
-7. **Ketujuh, saya membuat aplikasi `main` pada proyek `findyourfits`**. Kemudian, saya mendaftarkan aplikasi main ke dalam proyek `findmyfits` dengan cara menambahkan `main` pada berkas `settings.py` seperti berikut:
-	```
-	INSTALLED_APPS =  [  
-	...,  
-	'main'  
-	]
-	```
-8. **Kedelapan, saya menambahkan berkas `main.html` ke dalam direktori baru bernama `templates` pada direktori aplikasi `main`**. Berikut adalah file `main.html` yang saya buat:
-	```
-	<h1>FindYourFits</h1>
-	
-	<h3>Nama Aplikasi </h3>
-	<p>{{ app_name }}</p>
-	<h3>Nama </h3>
-	<p>{{ name }}</p>
-	<h3>NPM </h3>
-	<p>{{ name }}</p>
-	<h3>Kelas </h3>
-	<p>{{ class }}</p>
-	```
-9. **Kesembilan, menambahkan model `Product` ke dalam aplikasi  main.** Langkah ini saya lakukan dengan mengubah `models.py` yang ada di dalam folder `main` . Berikut adalah berkas models.py yang saya buat:
-	```
-	from  django.db  import  models
+## **TUGAS 3**
+### 1. Jelaskan mengapa kita memerlukan  _data delivery_  dalam pengimplementasian sebuah platform?
+Menurut beberapa sumber yang saya baca, _data platform_ penting dalam pengimplementasian sebuah platform karena _data delivery_ memungkinkan platform untuk menjalankan fungsi-fungsi yang melibatkan komunikasi antara komponen maupun user.
 
-	# Create your models here.
-	class  Product(models.Model):
-		name  =  models.CharField(max_length=200)
-		price  =  models.IntegerField()
-		stock  =  models.IntegerField() # tambahan
-		condition  =  models.TextField() # used or new
-		description  =  models.TextField() # tambahan
-	``` 
-	Kemudian, saya membuat dan mengaplikasikan migrasi model dengan menjalankan kedua perintah berikut:
-	```python manage.py makemigrations```
-	```python manage.py migrate```
-10. **Kesepuluh, saya melakukan konfigurasi routing URL Aplikasi `main`.** Pada langkah ini, saya menambahkan `urls.py` yang berisi:
-	```
-	from  django.urls  import  path
-	from  main.views  import  show_main
+**Contoh _data delivery_** antara komponen dengan user dalam konteks tugas kali ini adalah ketika user ingin melihat produk apa saja yang ada di _e-commerce_. Untuk menampilkan produk-produk tersebut ke user, maka platform melakukan **_data delivery_** misalnya dari suatu database produk ke program front-end yang nantinya akan ditampilkan ke user.  
 
-	app_name  =  'main'
-	urlpatterns  = [
-		path('', show_main, name='show_main'),
-	]
-	```
-11. **Kesebelas, saya melakukan konfigurasi routing URL Proyek**. Langkah ini saya lakukan dengan mengubah beberapa kode dalam berkas `urls.py` yang terletak di dalam direktori proyek `findyourfits`. Perubahan yang saya lakukan adalah menambahkan impor fungsi `include` dari `django.urls` dan menambahkan `path('',include('main.urls'))` dalam variabel `urlpatterns`.
-12. **Keduabelas, saya melakukan testing apakah proyek Django yang saya buat sudah bisa berjalan sesuai dengan apa yang saya mau atau belum**. Langkah ini saya lakukan dengan menjalankan perintah `python manage.py runserver` pada terminal dan membuka http://localhost:8000/ pada web browser.
-13. **Terakhir, saya melakukan commit dan push ke repositori Github dan ke Pacil Web Service (PWS)**
+Contoh fungsi lain dari **_data delivery_** dalam kehidupan kita sehari-hari adalah ketika kita melakukan _search_ pada suatu sosial media misalkan _Instagram_. Ketika kita melakukan _search_, maka platform akan berkomunikasi dan melakukan _data delivery_ untuk memunculkan informasi atau data yang dicari oleh user.
 
+Kesimpulannya adalah bahwa **platform memerlukan komunikasi diantara komponen-komponennya untuk melakukan fungsi-fungsinya.** Contoh komunikasi tersebut misalnya  komunikasi antara database dengan program back-end suatu platform. Komunikasi tersebut dapat dilakukan dengan adanya **_data delivery_**. Dengan demikian, suatu platform tidak akan berguna jika kita tidak menerapkan _data delivery_ dalam platform tersebut.
+### 2. Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+Dari beberapa sumber yang saya baca di internet, terdapat beberapa kelebihan dari JSON dibandingkan dengan XML yang menyebabkan JSON menjadi format data yang lebih populer dibanding dengan XML. Berikut adalah beberapa kelebihan JSON dibandingkan dengan XML:
++ JSON bisa menampung _value_ berupa Integer, String, List, dan Array secara langsung. Sementara untuk tipe data yang serupa, **XML memerlukan _parsing_** dari String ke tipe data yang diinginkan.
++ **JSON memiliki sintaks yang lebih pendek dibandingkan XML**, sehingga JSON memiliki ukuran yang lebih kecil dan dapat dibaca ataupun ditulis dengan lebih cepat dibandingkan dengan XML. 
++ **JSON memiliki sintaks yang lebih mmudah untuk dibaca dibandingkan dengan XML**
++ **JSON didukung secara langsung oleh bahasa JavaScript** sehingga lebih mudah untuk terintegrasi dengan aplikasi pada JavaScript dan API.
++ **JSON lebih mudah untuk diparsing dibandingkan dengan XML** sehingga lebih cepat dan efisien ketika dijalankan.
 
+Kesimpulanya adalah bahwa JSON lebih cocok untuk digunakan sebagai format data dalam pengembangan suatu website ataupun aplikasi karena JSON memiliki kecepatan dan efisiensi yang lebih baik dibandingkan dengan XML. Selain itu, JSON juga didukung langsung oleh JavaScript sehingga operasi-operasi dalam data JSON dapat dilakukan dengan lebih efisien dibandingkan dengan menggunakan XML yang harus diparsing terlebih dahulu. 
+Dikarenakan dalam penggunaan web dan aplikasi banyak terjadi _data delivery_, maka saya memilih **JSON** sebagai format data yang **lebih baik** dibandingkan XML karena **JSON memakan ruang penyimpanan yang lebih kecil, dapat dijalankan dengan lebih efisien dan lebih mudah untuk dibaca dibandingkan dengan XML.**
+### 3. Jelaskan fungsi dari method  `is_valid()`  pada form Django dan mengapa kita membutuhkan method tersebut?
+Fungsi method `is_valid()` adalah untuk melakukan validasi pada _forms_ sehingga data yang dimasukkan memenuhi kriteria yang sudah ditentukan dalam _form fields_. 
 
-### 2) - Buatlah bagan yang berisi  _request client_  ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara  `urls.py`,  `views.py`,  `models.py`, dan berkas  `html`.
-![PBP Tugas 2](https://github.com/user-attachments/assets/be6e5259-1893-4ad8-9566-5c3ee6985bc2)
-Alur Proses:
-1. User melakukan permintaan HTTP _(HTTP Request)_ berupa URL untuk meminta resource ke framework Django.
-2. Framework Django mencari URL yang diminta user.
-3. URL `(urls.py)` memanggil view yang sesuai dengan kode pada `views.py`.
-4. View `(views.py)` akan berinteraksi dengan Model `(models.py`) untuk mengambil ataupun mengubah data dari database.
-5. View `(views.py)` meng-_compile_ respons yang diberikan oleh Model `(models.py`) kembali ke Template `(template.html)`
-6. Hasil akhirnya adalah respons HTTP _(HTTP Response)_ yang dikirim kembali ke user dalam bentuk _web page_ atau halaman HTML.
-### 3) Jelaskan fungsi  `git`  dalam pengembangan perangkat lunak!
-**Git** adalah sistem kontrol versi terdistribusi _(distributed version control)_ yang dirancang untuk melacak perubahan _source code_ selama pengembangan perangkat lunak.
-**Git** memungkinkan banyak pengembang atau _developer_ untuk mengerjakan suatu proyek secara bersamaan tanpa mengganggu pekerjaans atu sama lain.
-Beberapa **fitur utama** yang dimiliki **git** adalah:
-1. **_Version Control_**: Git menyimpan riwayat perubahan file sehingga kita bisa saja kembali ke versi sebelumnya jika diperlukan.
-2. **_Branching_ dan _Merging_**: Git memungkinkan _developer_ untuk membuat _branch_ atau cabang sehingga _developer_ bisa menambahkan fitur atau memperbaiki _bug_ secara independen. Ketika _developer_ sudah selesai, maka file atau kode yang sudah ditambahkan atau diubah pada suatu cabang bisa digabung _(merge)_ kembali ke basis kode utama _(main codebase)_
-3. **Sistem Terdistribusi**: Setiap _developer_ memiliki _copy_ dari _repository_ termasuk riwayatnya dalam komputer mereka. Dengan demikian, pekerjaan _developer_ tidak terlalu bergantung terhadap server utama.
-4. **Kolaborasi**: **Git** memfasilitasi kolaborasi antar-_developer_ sehingga mudah untuk membagikan perubahan, melakukan _review_ kode, dan melihat kontribusi terhadap kode.
-5. **Efisiensi**: **Git** memiliki performa yang optimal, sehingga _developer_ dapat melakukan operasi seperti _commit_ perubahan, _branching_, dan _merging_ dengan cepat.
-(Dikutip dari https://www.quora.com/What-is-Git-and-why-should-I-use-it)
+Method `is_valid()` mengecek apakah data yang dimasukkan sudah sesuai dengan aturan-aturan yang kita tuliskan pada _form fields_, misalnya seperti **field mana saja yang harus diisi, tipe data apa yang digunakan pada suatu variabel, dan aturan validasi lainnya seperti nilai maksimum atau panjang string minimum.**  
 
-### 4) Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
-Menurut beberapa sumber yang saya baca tentang framework Django, terdapat beberapa poin yang saya anggap sebagai alasan kenapa Django digunakan sebagai framework yang dipelajari dalam mata kuliah PBP ini, yaitu:
-1. **Django dibuat menggunakan Python**, sehingga sintaksnya cukup familiar setidaknya bagi saya pribadi.
-2. **Django menggunakan struktur MVT _(Model-View-Template)_** yang menurut saya cukup mudah untuk dipahami bagi orang yang belum pernah melakukan web-development sebelumnya seperti saya.
-3. **Framework Django dapat diakses secara gratis dan bersifat _open source_**. Selain itu, Django memiliki dokumentasi yang luas dan mudah diikuti sehingga cocok untuk kegiatan pembelajaran.
-4.  **Django digunakan oleh banyak perusahaan di dunia**, diantaranya adalah Instagram, Spotify, dan YouTube. Dengan demikian, _framework_ Django sudah terbukti pengaplikasiannya di dunia sehingga bisa dijadikan sebagai framework untuk kegiatan pembelajaran.
-### 5) Mengapa model pada Django disebut sebagai  _ORM_?
-Karena ORM _(Object Relational Mapping)_ melakukan mapping dengan tabel-tabel dalam database dengan objek-objek dalam Python. Untuk melakukan CRUD _(Create, Read, Update, and Delete)_ pada Django, kita tidak perlu menuliskan query SQL secara langsung, melainkan kita hanya perlu melakukan perubahan terhadap suatu objek Python dengan metode yang mewakili operasi pada database. 
+Jika data valid, maka method `is_valid()` 
+mereturn `True` dan akan mengisi dictionary `cleaned_data` yang berisi data yang sudah divalidasi dan dikonversi ke tipe data yang sesuai. 
+
+Jika data tidak valid, maka method `is_valid()`  akan mereturn `False` dan kesalahan validasi tersebut akan disimpan dalam atribut `form.errors` sehingga kita bisa melihat kesalahan apa yang terjadi pada data yang tidak valid tersebut.
+
+Menurut saya, method `is_valid()` dibutuhkan karena method tersebut dapat mencegah program untuk memasukkan data yang tidak benar sehingga error-error yang diakibatkan oleh kesalahan input dalam database dapat dihindari. Selain itu, method `is_valid()` juga dapat memastikan bahwa semua nilai dalam data yang kita miliki memang sudah benar dan siap untuk diproses oleh program selanjutnya.
+### 4. Mengapa kita membutuhkan  `csrf_token`  saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan  `csrf_token`  pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+`csrf_token` adalah **random token yang berfungsi untuk mencegah _Cross-Site Request Forgery Attack_**. Adanya `csrf_token` menambah proteksi terhadap forms yang disubmit oleh user agar tidak dieksploitasi oleh penyerang melalui serangan CSRF.
+
+Kode `{% csrf_token %}`ketika kita membuat suatu form, maka program akan membuat suatu _field_ tersembunyi yang memuat suatu token yang sulit untuk ditebak. Ketika form tersebut di-_submit_, maka Django akan memeriksa apakah token yang ada dalam form sesuai dengan yang tersimpan pada sesi user. Jika token tersebut match, maka request user akan dilanjutkan atau diterima.
+
+Jika kita tidak menggunakan `csrf_token` pada forms yang kita buat, maka seorang _hacker_ bisa saja mengeksploitasi celah tersebut dengan melakukan  _Cross-Site Request Forgery (CSRF) Attack_. CSRF terjadi ketika seorang user _logged in_ ke website Django yang kita buat. _Hacker_ nantinya akan mengirimkan link website yang jika di klik oleh user, maka link tersebut akan mengirimkan request (seperti request untuk ganti password atau melakukan transfer uang) ke website Django kita tanpa interaksi dan tanpa sepengetahuan user. Karena user sudah terautentikasi dengan website Django kita, maka request yang dikirim oleh _hacker_ tersebut akan di-_treat_ seakan request tersebut dikirim oleh user. Tanpa adanya `csrf_token`, maka Django tidak akan tahu apakah request tersebut datang dari user atau bukan. Dengan demikian, request tersebut diteruskan sehingga terjadilah CSRF Attack.
+
+### 5. Jelaskan bagaimana cara kamu mengimplementasikan  _checklist_  di atas secara  _step-by-step_  (bukan hanya sekadar mengikuti tutorial)
