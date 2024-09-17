@@ -1,4 +1,6 @@
-from django.shortcuts import render, redirect   # Tambahkan import redirect di baris ini
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.core import serializers
 from main.forms import ProductEntryForm
 from main.models import ProductEntry
 # Create your views here.
@@ -22,3 +24,12 @@ def sell_product_entry(request):
     
     context = {'form': form}
     return render(request, "sell_product_entry.html", context)
+
+def show_xml(request):
+    data = ProductEntry.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json(request):
+    data = ProductEntry.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    
