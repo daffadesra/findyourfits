@@ -9,11 +9,18 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+# Authorization
+from django.contrib.auth.decorators import login_required
+
+
+
 
 # Create your views here.
+@login_required(login_url='/login')
 def show_main(request):
     product_entries = ProductEntry.objects.all()
     context = {
+        'user_name': 'belum works om',
         'name': 'Daffa Desra Hastiar',
         'npm': '2306165490',
         'class': 'PBP C',
