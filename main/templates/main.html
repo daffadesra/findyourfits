@@ -7,7 +7,7 @@
 <p>{{ name }}</p> 
 <h3>NPM </h3>
 <p>{{ npm }}</p> 
-<h3>Kelas </h3>ß
+<h3>Kelas </h3>
 <p>{{ class }}</p>
 
 {% if not product_entries %}
@@ -42,4 +42,5 @@
 <a href="{% url 'main:logout' %}">
   <button>Logout</button>
 </a>
+<h5>Sesi terakhir login: {{ last_login }}</h5>
 {% endblock content %}
