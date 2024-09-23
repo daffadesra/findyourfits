@@ -22,9 +22,9 @@ from django.urls import reverse
 # Create your views here.
 @login_required(login_url='/login')
 def show_main(request):
-    product_entries = ProductEntry.objects.all()
+    product_entries = ProductEntry.objects.filter(user=request.user)
     context = {
-        'user_name': 'belum works om',
+        'user_name': request.user.username,
         'name': 'Daffa Desra Hastiar',
         'npm': '2306165490',
         'class': 'PBP C',
@@ -38,7 +38,9 @@ def sell_product_entry(request):
     form = ProductEntryForm(request.POST or None)
     
     if form.is_valid() and request.method == "POST":
-        form.save()
+        product_entry = form.save(commit=False)
+        product_entry.user = request.user
+        product_entry.save()
         return redirect('main:show_main')
     
     context = {'form': form}
