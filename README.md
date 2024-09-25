@@ -340,3 +340,5 @@ Untuk menghubungkan model `ProductEntry` dengan `User`, berikut adalah langkah-l
 		...
 		}
 	```
+
+	
