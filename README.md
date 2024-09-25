@@ -308,6 +308,131 @@ Django menggunakan mekanisme **session** yang tersimpan dalam **cookies** untuk 
 Dari gambar tersebut, tampak bahwa terdapat data **sessionid** yang menyimpan data login dari pengguna yang digunakan Django untuk mengingat bahwa user dengan sessionid tersebut sudah login.
 **Kegunaan lain dari cookies** yang sering saya gunakan diantaranya adalah untuk menyimpan preferensi pengguna yang biasa digunakan untuk _personalized experience_, misalnya ketika saya membuka web eccomerce, maka barang yang muncul adalah barang yang sering saya cari sebelumnya. Selain itu, **cookies** juga berfungsi untuk mengingat barang apa saja yang saya simpan dalam keranjang belanja dalam suatu situs e-commerce.
 **Tidak semua cookies aman digunakan**. Dalam beberapa kasus yang saya baca di internet, seorang hacker pernah menggunakan cookies untuk memberikan instruksi dan perintah ke back-end suatu website. Setelah itu, hacker menyimpan dan mengambil sessionid dari user (_sesison hijacking_).  Untuk mengantisipasi hal tersebut, Django menyediakan beberapa cara agar cookies lebih aman, diantaranya adalah menggunakan HttpOnly dan Secure pada settings.py. HttpOnly digunakan agar cookies tidak bisa diakses oleh JavaScript dan Secure berfungsi agar cookies hanya dikirim melalui HTTPS.
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan  _checklist_  di atas secara  _step-by-step_  (bukan hanya sekadar mengikuti tutorial).
+Untuk mengimplementasikan checklist, maka terdapat beberapa langkah yang saya lakukan, yaitu:
+### 1. Membuat Fungsi dan Form Registrasi
+Untuk mengimplementasikan fungsi ini, saya melakukan langkah-langkah berikut:
+1) Menambahkan import `UserCreationForm` dan `messages` pada berkas `views.py` pada subdirektori main. Berikut adalah kodenya:
+	```
+	from django.contrib.auth.forms import UserCreationForm  
+	from django.contrib import messages
+	```
+2) Menambahkan fungsi `register` ke dalam `views.py` dengan implementasi sebagai berikut:
+	```
+	def register(request):
+	    form = UserCreationForm()
+	    if request.method == "POST":
+	        form = UserCreationForm(request.POST)
+	        if form.is_valid():
+	            form.save()
+	            messages.success(request, 'Your account has been successfully created!')
+	            return redirect('main:login')
+	    context = {'form':form}
+	    return render(request, 'register.html', context)
+	```
+3) Membuat berkas `register.html` pada direktori `main/templates` untuk membuat template untuk melakukan registrasi.
+4) Mengimport fungsi `register` yang sudah dibuat dengan menambahkan kode berikut pada `urls.py`:
+	```
+	from main.views import register
+	...
+	urlpatterns =  [  
+	path('register/', register, name='register'),  
+	]
+	```
+### 2. Membuat Fungsi Login
+Untuk membuat fungsi login, berikut adalah langkah-langkahnya:
+1) Menambahkan import `authenticate`, `login`, dan `AuthenticationForm` untuk melakukan autentikasi dan login. Berikut adalah kodenya:
+	```
+	from django.contrib.auth.forms import UserCreationForm, AuthenticationForm  
+	from django.contrib.auth import authenticate, login
+	```
+2) Menambahkan fungsi `login_user` ke `views.py` dengan implementasi sebagai berikut:
+	```
+	def login_user(request):
+	   if request.method == 'POST':
+	      form = AuthenticationForm(data=request.POST)
+	      if form.is_valid():
+	            user = form.get_user()
+	            login(request, user)
+	            return redirect('main:show_main')
+	   else:
+	      form = AuthenticationForm(request)
+	   context = {'form': form}
+	   return render(request, 'login.html', context)
+	```
+3) Membuat berkas HTML `login.html` yang diletakkan pada direktori `main/templates` untuk menampilkan halaman login untuk user.
+4) Menambahkan `urls.py` dengan import `login_user` dan path untuk melakukan login. Berikut adalah kodenya:
+	```
+	from main.views import login_user
+	...
+	urlpatterns =  [  
+		...  
+		path('login/', login_user, name='login'),  
+	]
+	```
+### 3. Membuat Fungsi Logout
+Mirip seperti dua langkah sebelumnya, berikut adalah langkah-langkah yang saya lakukan:
+1) Menambahkan berkas `views.py` dengan import `logout` dan membuat fungsi `logout_user`. Berikut adalah kodenya:
+	```
+	from django.contrib.auth import logout
+	...
+	def  logout_user(request):  
+		logout(request)  
+		return redirect('main:login')
+	```
+2) Menambahkan logout button pada `main.html` untuk melakukan logout dengan kode berikut:
+```
+...
+<a  href="{% url 'main:logout' %}">  
+	<button>Logout</button>  
+</a>
+...
+```
+3) Menambahkan file `urls.py`  dengan import fungsi `logout` dan URL path untuk melakukan `logout`. Berikut adalah kode yang ditambahkan:
+```
+from main.views import logout_user
+...
+urlpatterns =  [  
+	...  
+	path('logout/', logout_user, name='logout'),  
+]
+```
+### 4. Menggunakan Data dari Cookies
+Untuk mengimplementasikan _cookies_ dengan tujuan menambahkan data _last login_, berikut adalah langkah-langkah yang saya lakukan:
+1) Menambahkan import `HttpResponseRedirect`, `reverse`, dan `datetime`dan memodifikasi fungsi `login_user` untuk melihat kapan terakhir kali user melakukan login.  Berikut adalah kode yang ditambah/modifikasi:
+	```
+	import datetime
+	from django.http import HttpResponseRedirect
+	from django.urls import reverse
+	...  
+	if form.is_valid():  
+		user = form.get_user()  
+		login(request, user)  
+		response = HttpResponseRedirect(reverse("main:show_main"))  
+		response.set_cookie('last_login',  str(datetime.datetime.now()))  
+		return response  
+	...
+	```
+2) Mengubah fungsi `show_main`  agar dapat menampilkan informasi _cookies_ dengan menambahkan variabel context dengan kode berikut:
+	```
+	context - {
+	'last_login': request.COOKIES['last_login']
+	}
+	```
+3) Mengubah fungsi `logout_user`  agar dapat menghapus cookie `last_login` yang tersimpan dalam browser. Berikut adalah kodenya setelah diubah:
+	```
+	def logout_user(request):
+	    logout(request)
+	    response = HttpResponseRedirect(reverse('main:login'))
+	    response.delete_cookie('last_login')
+	    return response
+	```
+4) Menambahkan kode `main.html` untuk menampilkan sesi terakhir login yang tersimpan dalam cookies. Berikut adalah kodenya:
+	```
+	...  
+	<h5>Sesi terakhir login: {{ last_login }}</h5>  
+	...
+	```
 ### 5. Menghubungkan Model `ProductEntry` dengan `User`
 Untuk menghubungkan model `ProductEntry` dengan `User`, berikut adalah langkah-langkah yang saya lakukan:
 1) Menambahkan kode `models.py`, yaitu  pada model `ProductEntry` agar dapat menyimpan `User` sebagai pemilik dari product tersebut.  Berikut adalah kode yang ditambahkan:
@@ -341,4 +466,3 @@ Untuk menghubungkan model `ProductEntry` dengan `User`, berikut adalah langkah-l
 		}
 	```
 
-	
