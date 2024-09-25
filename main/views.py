@@ -36,7 +36,6 @@ def show_main(request):
 
 def sell_product_entry(request):
     form = ProductEntryForm(request.POST or None)
-    
     if form.is_valid() and request.method == "POST":
         product_entry = form.save(commit=False)
         product_entry.user = request.user

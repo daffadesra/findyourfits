@@ -278,11 +278,6 @@ def  sell_product_entry(request):
 14. JSON by ID 
 <img width="1795" alt="image" src="https://github.com/user-attachments/assets/3f6411f9-3117-47db-9417-91d78a4e4786">
 
-# **README**
-Ini adalah repositori untuk tugas PBP 2025 milik Daffa Desra Hastiar (2306165490) dari kelas PBP C.
-
-Link aplikasi PWS : http://daffa-desra-findyourfits.pbp.cs.ui.ac.id/
-
 ## **TUGAS 4**
 ## 1. Apa perbedaan antara  `HttpResponseRedirect()`  dan  `redirect()`?
 `HttpResponseRedirect` dan `redirect()` adalah fungsi yang memiliki kegunaan yang sama, yaitu melakukan mengarahkan pengguna ke URL berbeda. Perbedaannya adalah yaitu `HttpResponseRedirect` hanya *menerima* argumen pertama yaitu URL. Sedangkan `redirect()` bisa menerima argumen berupa URL, objek, atau view.
@@ -313,5 +308,35 @@ Django menggunakan mekanisme **session** yang tersimpan dalam **cookies** untuk 
 Dari gambar tersebut, tampak bahwa terdapat data **sessionid** yang menyimpan data login dari pengguna yang digunakan Django untuk mengingat bahwa user dengan sessionid tersebut sudah login.
 **Kegunaan lain dari cookies** yang sering saya gunakan diantaranya adalah untuk menyimpan preferensi pengguna yang biasa digunakan untuk _personalized experience_, misalnya ketika saya membuka web eccomerce, maka barang yang muncul adalah barang yang sering saya cari sebelumnya. Selain itu, **cookies** juga berfungsi untuk mengingat barang apa saja yang saya simpan dalam keranjang belanja dalam suatu situs e-commerce.
 **Tidak semua cookies aman digunakan**. Dalam beberapa kasus yang saya baca di internet, seorang hacker pernah menggunakan cookies untuk memberikan instruksi dan perintah ke back-end suatu website. Setelah itu, hacker menyimpan dan mengambil sessionid dari user (_sesison hijacking_).  Untuk mengantisipasi hal tersebut, Django menyediakan beberapa cara agar cookies lebih aman, diantaranya adalah menggunakan HttpOnly dan Secure pada settings.py. HttpOnly digunakan agar cookies tidak bisa diakses oleh JavaScript dan Secure berfungsi agar cookies hanya dikirim melalui HTTPS.
-## 5. Jelaskan bagaimana cara kamu mengimplementasikan  _checklist_  di atas secara  _step-by-step_  (bukan hanya sekadar mengikuti tutorial).
-## 5. Jelaskan bagaimana cara kamu mengimplementasikan  _checklist_  di atas secara  _step-by-step_  (bukan hanya sekadar mengikuti tutorial).
+### 5. Menghubungkan Model `ProductEntry` dengan `User`
+Untuk menghubungkan model `ProductEntry` dengan `User`, berikut adalah langkah-langkah yang saya lakukan:
+1) Menambahkan kode `models.py`, yaitu  pada model `ProductEntry` agar dapat menyimpan `User` sebagai pemilik dari product tersebut.  Berikut adalah kode yang ditambahkan:
+	```
+	from django.contrib.auth.models import User  
+	...
+	class  MoodEntry(models.Model):  
+		user = models.ForeignKey(User, on_delete=models.CASCADE)  
+	...
+	```
+2) Mengubah kode `views.py`, yaitu pada `sell_product_entry` agar mengubah attribut user pada form yang dibuat menjadi user yang sedang login, Berikut adalah tambahan kodenya:
+	```
+	def  sell_product_entry(request):
+		form  =  ProductEntryForm(request.POST or  None)
+		if  form.is_valid() and  request.method ==  "POST":
+			product_entry  =  form.save(commit=False)
+			product_entry.user =  request.user
+			product_entry.save()
+			return  redirect('main:show_main')
+
+	context  = {'form': form}
+	return  render(request, "sell_product_entry.html", context)
+	```
+3) Mengubah value dari `show_main` agar menampilkan nama sesuai user dan produk yang hanya dimiliki oleh user tersebut. Ubahan kodenya adalah menjadi seperti berikut:
+	```
+	def  show_main(request):
+		product_entries  =  ProductEntry.objects.filter(user=request.user)
+		context  = {
+			'user_name': request.user.username,
+		...
+		}
+	```
