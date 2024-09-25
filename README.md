@@ -2,6 +2,105 @@
 Ini adalah repositori untuk tugas PBP 2025 milik Daffa Desra Hastiar (2306165490) dari kelas PBP C.
 
 Link aplikasi PWS : http://daffa-desra-findyourfits.pbp.cs.ui.ac.id/
+## **TUGAS 2**
+### 1) Jelaskan bagaimana cara kamu mengimplementasikan _checklist_ di atas secara _step-by-step_ (bukan hanya sekadar mengikuti tutorial)
+1. **Pertama-tama, saya membuat folder lokal baru di laptop dengan nama `findyourfits`**. Setelah itu, saya membuat direktori lokal dengan nama yang sama yang kemudian saya inisiasi dengan Git. Di dalam folder tersebut, saya menambahkan file README.md pertama saya yang berisi identitas diri saya. 
+2. **Kedua, saya membuat repositori Github baru bernama "findyourfits" pada akun Github saya.** Pada langkah ini, saya membuat branch utama saya yang saya namakan "main". Kemudian, saya menjalankan perintah `git remote add origin <URL_REPO_SAYA>` untuk menghubungkan repositori lokal saya dengan repositori di Github. Kemudian saya melakukan `add`,`commit`, dan `push` ke repositori saya untuk pertama kalinya.
+3. **Ketiga, saya menginisiasi dan mengaktifkan _Virtual Enviroment_ pada folder `findyourfits` **. 
+4. **Keempat, saya membuat berkas `requirements.txt` di dalam folder `findyourfits` yang berisi:
+	```
+	django  
+	gunicorn  
+	whitenoise  
+	psycopg2-binary  
+	requests  
+	urllib3
+	```
+	yang kemudian saya install menggunakan command `pip install -r requirements.txt`. Setelah itu, saya membuat proyek baru dengan nama `findyourfits` dengan command:
+	`django-admin startproject findyourfits .`
+5. **Kelima, saya membuat berkas `.gitignore` dengan isi yang sesuai pada Tutorial 0.** Setelah itu, saya melakukan Git `add`, `commit`, dan `push` ke repositori Github `findyourfits`.
+6. **Keenam, saya melakukan konfigurasi untuk project `findyourfits` pada Pacil Web Service (PWS)**. Pada langkah ini, saya menambahkan project `findyourfits` melalui website **Pacil Web Service (PWS)**. Setelah itu, saya menambahkan `ALLOWED_HOSTS` pada `settings.py` di proyek Django `findyourfits` seperti berikut:
+`ALLOWED_HOSTS  = ["localhost", "127.0.0.1", "daffa-desra-findyourfits.pbp.cs.ui.ac.id"]`
+Kemudian, saya mengubah nama branch utama menjadi `main` dengan perintah `git branch -M main`. Setelah itu, saya melakukan push ke repositori Github dan PWS.
+7. **Ketujuh, saya membuat aplikasi `main` pada proyek `findyourfits`**. Kemudian, saya mendaftarkan aplikasi main ke dalam proyek `findmyfits` dengan cara menambahkan `main` pada berkas `settings.py` seperti berikut:
+	```
+	INSTALLED_APPS =  [  
+	...,  
+	'main'  
+	]
+	```
+8. **Kedelapan, saya menambahkan berkas `main.html` ke dalam direktori baru bernama `templates` pada direktori aplikasi `main`**. Berikut adalah file `main.html` yang saya buat:
+	```
+	<h1>FindYourFits</h1>
+	
+	<h3>Nama Aplikasi </h3>
+	<p>{{ app_name }}</p>
+	<h3>Nama </h3>
+	<p>{{ name }}</p>
+	<h3>NPM </h3>
+	<p>{{ name }}</p>
+	<h3>Kelas </h3>
+	<p>{{ class }}</p>
+	```
+9. **Kesembilan, menambahkan model `Product` ke dalam aplikasi  main.** Langkah ini saya lakukan dengan mengubah `models.py` yang ada di dalam folder `main` . Berikut adalah berkas models.py yang saya buat:
+	```
+	from  django.db  import  models
+
+	# Create your models here.
+	class  Product(models.Model):
+		name  =  models.CharField(max_length=200)
+		price  =  models.IntegerField()
+		stock  =  models.IntegerField() # tambahan
+		condition  =  models.TextField() # used or new
+		description  =  models.TextField() # tambahan
+	``` 
+	Kemudian, saya membuat dan mengaplikasikan migrasi model dengan menjalankan kedua perintah berikut:
+	```python manage.py makemigrations```
+	```python manage.py migrate```
+10. **Kesepuluh, saya melakukan konfigurasi routing URL Aplikasi `main`.** Pada langkah ini, saya menambahkan `urls.py` yang berisi:
+	```
+	from  django.urls  import  path
+	from  main.views  import  show_main
+
+	app_name  =  'main'
+	urlpatterns  = [
+		path('', show_main, name='show_main'),
+	]
+	```
+11. **Kesebelas, saya melakukan konfigurasi routing URL Proyek**. Langkah ini saya lakukan dengan mengubah beberapa kode dalam berkas `urls.py` yang terletak di dalam direktori proyek `findyourfits`. Perubahan yang saya lakukan adalah menambahkan impor fungsi `include` dari `django.urls` dan menambahkan `path('',include('main.urls'))` dalam variabel `urlpatterns`.
+12. **Keduabelas, saya melakukan testing apakah proyek Django yang saya buat sudah bisa berjalan sesuai dengan apa yang saya mau atau belum**. Langkah ini saya lakukan dengan menjalankan perintah `python manage.py runserver` pada terminal dan membuka http://localhost:8000/ pada web browser.
+13. **Terakhir, saya melakukan commit dan push ke repositori Github dan ke Pacil Web Service (PWS)**
+
+
+
+### 2) - Buatlah bagan yang berisi  _request client_  ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara  `urls.py`,  `views.py`,  `models.py`, dan berkas  `html`.
+![PBP Tugas 2](https://github.com/user-attachments/assets/62d5de3e-d0b6-49c0-926f-cc6e32ae44d4)
+Alur Proses:
+1. User melakukan permintaan HTTP _(HTTP Request)_ berupa URL untuk meminta resource ke framework Django.
+2. Framework Django mencari URL yang diminta user.
+3. URL `(urls.py)` memanggil view yang sesuai dengan kode pada `views.py`.
+4. View `(views.py)` akan berinteraksi dengan Model `(models.py`) untuk mengambil ataupun mengubah data dari database.
+5. View `(views.py)` meng-_compile_ respons yang diberikan oleh Model `(models.py`) kembali ke Template `(template.html)`
+6. Hasil akhirnya adalah respons HTTP _(HTTP Response)_ yang dikirim kembali ke user dalam bentuk _web page_ atau halaman HTML.
+### 3) Jelaskan fungsi  `git`  dalam pengembangan perangkat lunak!
+**Git** adalah sistem kontrol versi terdistribusi _(distributed version control)_ yang dirancang untuk melacak perubahan _source code_ selama pengembangan perangkat lunak.
+**Git** memungkinkan banyak pengembang atau _developer_ untuk mengerjakan suatu proyek secara bersamaan tanpa mengganggu pekerjaans atu sama lain.
+Beberapa **fitur utama** yang dimiliki **git** adalah:
+1. **_Version Control_**: Git menyimpan riwayat perubahan file sehingga kita bisa saja kembali ke versi sebelumnya jika diperlukan.
+2. **_Branching_ dan _Merging_**: Git memungkinkan _developer_ untuk membuat _branch_ atau cabang sehingga _developer_ bisa menambahkan fitur atau memperbaiki _bug_ secara independen. Ketika _developer_ sudah selesai, maka file atau kode yang sudah ditambahkan atau diubah pada suatu cabang bisa digabung _(merge)_ kembali ke basis kode utama _(main codebase)_
+3. **Sistem Terdistribusi**: Setiap _developer_ memiliki _copy_ dari _repository_ termasuk riwayatnya dalam komputer mereka. Dengan demikian, pekerjaan _developer_ tidak terlalu bergantung terhadap server utama.
+4. **Kolaborasi**: **Git** memfasilitasi kolaborasi antar-_developer_ sehingga mudah untuk membagikan perubahan, melakukan _review_ kode, dan melihat kontribusi terhadap kode.
+5. **Efisiensi**: **Git** memiliki performa yang optimal, sehingga _developer_ dapat melakukan operasi seperti _commit_ perubahan, _branching_, dan _merging_ dengan cepat.
+(Dikutip dari https://www.quora.com/What-is-Git-and-why-should-I-use-it)
+
+### 4) Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
+Menurut beberapa sumber yang saya baca tentang framework Django, terdapat beberapa poin yang saya anggap sebagai alasan kenapa Django digunakan sebagai framework yang dipelajari dalam mata kuliah PBP ini, yaitu:
+1. **Django dibuat menggunakan Python**, sehingga sintaksnya cukup familiar setidaknya bagi saya pribadi.
+2. **Django menggunakan struktur MVT _(Model-View-Template)_** yang menurut saya cukup mudah untuk dipahami bagi orang yang belum pernah melakukan web-development sebelumnya seperti saya.
+3. **Framework Django dapat diakses secara gratis dan bersifat _open source_**. Selain itu, Django memiliki dokumentasi yang luas dan mudah diikuti sehingga cocok untuk kegiatan pembelajaran.
+4.  **Django digunakan oleh banyak perusahaan di dunia**, diantaranya adalah Instagram, Spotify, dan YouTube. Dengan demikian, _framework_ Django sudah terbukti pengaplikasiannya di dunia sehingga bisa dijadikan sebagai framework untuk kegiatan pembelajaran.
+### 5) Mengapa model pada Django disebut sebagai  _ORM_?
+Karena ORM _(Object Relational Mapping)_ melakukan mapping dengan tabel-tabel dalam database dengan objek-objek dalam Python. Untuk melakukan CRUD _(Create, Read, Update, and Delete)_ pada Django, kita tidak perlu menuliskan query SQL secara langsung, melainkan kita hanya perlu melakukan perubahan terhadap suatu objek Python dengan metode yang mewakili operasi pada database. 
 
 ## **TUGAS 3**
 ### 1. Jelaskan mengapa kita memerlukan  _data delivery_  dalam pengimplementasian sebuah platform?
@@ -178,3 +277,41 @@ def  sell_product_entry(request):
 <img width="1799" alt="image" src="https://github.com/user-attachments/assets/d6a2a68a-5316-4cc1-82a4-5f7c34e85d92">
 14. JSON by ID 
 <img width="1795" alt="image" src="https://github.com/user-attachments/assets/3f6411f9-3117-47db-9417-91d78a4e4786">
+
+# **README**
+Ini adalah repositori untuk tugas PBP 2025 milik Daffa Desra Hastiar (2306165490) dari kelas PBP C.
+
+Link aplikasi PWS : http://daffa-desra-findyourfits.pbp.cs.ui.ac.id/
+
+## **TUGAS 4**
+## 1. Apa perbedaan antara  `HttpResponseRedirect()`  dan  `redirect()`?
+`HttpResponseRedirect` dan `redirect()` adalah fungsi yang memiliki kegunaan yang sama, yaitu melakukan mengarahkan pengguna ke URL berbeda. Perbedaannya adalah yaitu `HttpResponseRedirect` hanya *menerima* argumen pertama yaitu URL. Sedangkan `redirect()` bisa menerima argumen berupa URL, objek, atau view.
+## 2. Jelaskan cara kerja penghubungan model  `Product`  dengan  `User`!
+Pada tutorial,  model `Product` dan `User` dihubungkan menggunakan relasi `ForeignKey`. Dengan menggunakan `ForeignKey`, maka setiap objek produk akan dihubungkan dengan pengguna tertentu. Model `User` sudah disediakan Django, kita hanya perlu meng-_import_ `django.contrib.auth.models from User`. Berikut adalah implementasi yang saya gunakan dalam program `models.py` yang terletak dalam direktori `main`saya:
+```
+...
+from  django.db  import  models
+from  django.contrib.auth.models  import  User
+class  ProductEntry(models.Model):
+	user  =  models.ForeignKey(User, on_delete=models.CASCADE)
+	...
+...
+```
+Dengan mengubah kode pada model `ProductEntry` dengan kode di atas, maka setiap `Product` yang dibuat akan dihubungkan dengan satu `User` dengan hubungan `User` adalah pemilik dari `Product`. Parameter `on_delete =models.CASCADE` berfungsi untuk menghapus `Produk` jika `User` dihapus.
+
+## 3. Apa perbedaan antara  _authentication_  dan  _authorization_, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
+**_Authentication_** adalah proses untuk memverifikasi identitas pengguna sebelum memberikan akses,  seperti akses ke sistem, akun,  atau file. Sedangkan **_authorization_** adalah proses memberikan hak akses kepada pengguna untuk melakukan tindakan tertentu setelah mereka diotentikasi. **_Authorization_** menentukan hal apa saja yang dapat dilakukan pengguna yang telah berhasil login atau berhasil di-_autentikasi_. 
+
+Ketika pengguna melakukan login, maka yang terjadi adalah autentikasi kemudian autorisasi. Pertama-tama, Django memeriksa apakah kombinasi username dan password yang dimasukkan pengguna sudah cocok dengan data yang tersimpan dalam database. Jika sama, maka pengguna dengan username tersebut dianggap ter-**autentikasi** (sebaliknya, jika tidak sama, maka pengguna tidak berhasil diautentikasi).  Setelah pengguna berhasil terautentikasi, maka Django akan menentukan apakah pengguna tersebut memiliki hak untuk melakukan hal tertentu, misalnya hak untuk mengakses halaman, membuka file, atau hal lainnya. Misalnya jika user adalah seorang admin, maka user bisa melihat data-data tertentu. Sedangkan jika user bukan admin, maka user tidak bisa melihat data-data tersebut. Inilah yang disebut dengan **otorisasi**.
+
+Untuk mengimplementasikan **autentikasi dan otorisasi**, Django menyediakan beberapa fungsi bawaann. 
+Untuk fungsi autentikasi, Django menyediakan metode seperti  UserCreationForm, AuthenticationForm, authenticate, login dan logout. Method `authenticate()`  dan `login` berguna untuk melakukan autentikasi dan kemudian login jika autentikasi berhasil. Method `logout()` digunakan untuk keluar dari akun suatu user.
+Untuk fungsi **otorisasi**, Salah satu yang sudah diajarkan dalam tutorial adalah menggunakan decorator `@login_required` yang diletakkan pada fungsi yang ada dalam file `views.py`. Fungsi ini berguna untuk mengharuskan pengguna untuk login terlebih dahulu sebelum bisa mengakses views tersebut.
+## 4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari  _cookies_  dan apakah semua cookies aman digunakan?
+Django menggunakan mekanisme **session** yang tersimpan dalam **cookies** untuk mengingat pengguna yang telah login. Saat pengguna berhasil login, Django membuat session dan menyimpan informasi terkait di database, kemudian memberikan pengguna session ID dalam bentuk cookie di browser. Contohnya adalah seperti berikut: 
+<img width="1796" alt="image" src="https://github.com/user-attachments/assets/6d5aa785-c1e1-4115-832d-cb9cfb4ffcf7">
+Dari gambar tersebut, tampak bahwa terdapat data **sessionid** yang menyimpan data login dari pengguna yang digunakan Django untuk mengingat bahwa user dengan sessionid tersebut sudah login.
+**Kegunaan lain dari cookies** yang sering saya gunakan diantaranya adalah untuk menyimpan preferensi pengguna yang biasa digunakan untuk _personalized experience_, misalnya ketika saya membuka web eccomerce, maka barang yang muncul adalah barang yang sering saya cari sebelumnya. Selain itu, **cookies** juga berfungsi untuk mengingat barang apa saja yang saya simpan dalam keranjang belanja dalam suatu situs e-commerce.
+**Tidak semua cookies aman digunakan**. Dalam beberapa kasus yang saya baca di internet, seorang hacker pernah menggunakan cookies untuk memberikan instruksi dan perintah ke back-end suatu website. Setelah itu, hacker menyimpan dan mengambil sessionid dari user (_sesison hijacking_).  Untuk mengantisipasi hal tersebut, Django menyediakan beberapa cara agar cookies lebih aman, diantaranya adalah menggunakan HttpOnly dan Secure pada settings.py. HttpOnly digunakan agar cookies tidak bisa diakses oleh JavaScript dan Secure berfungsi agar cookies hanya dikirim melalui HTTPS.
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan  _checklist_  di atas secara  _step-by-step_  (bukan hanya sekadar mengikuti tutorial).
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan  _checklist_  di atas secara  _step-by-step_  (bukan hanya sekadar mengikuti tutorial).
