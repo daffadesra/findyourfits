@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% include 'navbar.html' %}
 <h1>FindYourFits</h1>
 
 <h3> Selamat datang, {{ user_name }}! </h3>
@@ -29,6 +30,20 @@
     <td>{{product_entry.stock}}</td>
     <td>{{product_entry.condition}}</td>
     <td>{{product_entry.description}}</td>
+    <td>
+      <a href="{% url 'main:edit_product' product_entry.pk %}">
+          <button>
+              Edit
+          </button>
+      </a>
+    </td>
+    <td>
+        <a href="{% url 'main:hapus_product' product_entry.pk %}">
+            <button>
+                Delete
+            </button>
+        </a>
+    </td>
   </tr>
   {% endfor %}
 </table>

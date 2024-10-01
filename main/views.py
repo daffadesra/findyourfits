@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
 from main.forms import ProductEntryForm
 from main.models import ProductEntry
@@ -92,3 +92,20 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return redirect('main:login')
+
+def edit_product(request, id):
+    product = ProductEntry.objects.get(pk = id)
+
+    form = ProductEntryForm(request.POST or None, instance=product)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+def hapus_product(request, id):
+    product = ProductEntry.objects.get(pk = id)
+    product.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
