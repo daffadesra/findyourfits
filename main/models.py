@@ -10,5 +10,6 @@ class ProductEntry(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField()
     stock = models.IntegerField() # tambahan
-    condition = models.TextField() # used or new
+    condition = models.CharField(max_length=30) # used or new
     description = models.TextField() # tambahan
+    date_added = models.DateTimeField(auto_now_add=True) # tanggal dibuat

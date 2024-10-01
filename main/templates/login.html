@@ -5,28 +5,34 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="login">
-  <h1>Login</h1>
 
-  <form method="POST" action="">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input class="btn login_btn" type="submit" value="Login" /></td>
-      </tr>
-    </table>
-  </form>
+<div class="flex items-center justify-center min-h-screen bg-gradient-to-b from-cyan-300 via-cyan-500 to-cyan-700">
+    <div class="w-full max-w-md">
+        <div class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-cyan-800">Welcome to FindYourFits!</h1>
+            </div>
 
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %} Don't have an account yet?
-  <a href="{% url 'main:register' %}">Register Now</a>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <input type="text" name="username" id="username" placeholder="Username" class="w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+                </div>
+                <div class="mb-6">
+                    <input type="password" name="password" id="password" placeholder="Password" class="w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+                </div>
+                <div class="mb-6">
+                    <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">
+                        Login
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center text-gray-600">
+                <p>Belum punya akun? <a href="{% url 'main:register' %}" class="font-bold text-cyan-600 hover:text-cyan-800 transition duration-300">Daftar sekarang</a></p>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock content %}

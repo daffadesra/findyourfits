@@ -1,61 +1,43 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>FindYourFits</title>
+{% endblock meta %}
+
 {% block content %}
 {% include 'navbar.html' %}
-<h1>FindYourFits</h1>
+<div class="container mx-auto px-4 py-8 justify-center">
+  <!-- Informasi akun -->
+  <div class="bg-gradient-to-r from-cyan-950 to-cyan-700 rounded-lg shadow-lg p-6 mb-8 text-white">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-center">Welcome Back, {{ user.username }}</h2>
+      <div class="text-center md:text-md sm:text-lg space-y-2">
+        <p><span class="font-semibold">Nama:</span> {{ name }}</p>
+        <p><span class="font-semibold">NPM:</span> {{ npm }}</p>
+        <p><span class="font-semibold">Kelas:</span> {{ class }}</p>
+        <p><span class="font-semibold">Last Login:</span> {{ last_login }}</p>
+      </div>
+  </div>
 
-<h3> Selamat datang, {{ user_name }}! </h3>
-<h3>Nama </h3>
-<p>{{ name }}</p> 
-<h3>NPM </h3>
-<p>{{ npm }}</p> 
-<h3>Kelas </h3>
-<p>{{ class }}</p>
-
-{% if not product_entries %}
-<p>Belum ada produk yang dijual saat ini.</p>
-{% else %}
-<table>
-  <tr>
-    <th>Nama Produk</th>
-    <th>Harga</th>
-    <th>Stok</th>
-    <th>Kondisi</th>
-    <th>Deskripsi</th>
-  </tr>
-
-  {% for product_entry in product_entries %}
-  <tr>
-    <td>{{product_entry.name}}</td>
-    <td>{{product_entry.price}}</td>
-    <td>{{product_entry.stock}}</td>
-    <td>{{product_entry.condition}}</td>
-    <td>{{product_entry.description}}</td>
-    <td>
-      <a href="{% url 'main:edit_product' product_entry.pk %}">
-          <button>
-              Edit
-          </button>
-      </a>
-    </td>
-    <td>
-        <a href="{% url 'main:hapus_product' product_entry.pk %}">
-            <button>
-                Delete
-            </button>
-        </a>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
-{% endif %}
-
-<br />
-
-<a href="{% url 'main:sell_product_entry' %}">
-  <button>Tambah Produk ke Market</button>
-</a>
-<a href="{% url 'main:logout' %}">
-  <button>Logout</button>
-</a>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
+  <!-- List produk -->
+  <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+    <div class="bg-gradient-to-r from-cyan-600 to-cyan-400 p-6">
+        <h1 class="text-2xl sm:text-4xl font-bold text-center text-white">List Produk</h1>
+    </div>
+    <div class="p-4 sm:p-6">
+        {% if product_entries %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {% for product in product_entries %}
+                    {% include 'card_product.html' with product=product %}
+                {% endfor %}
+            </div>
+        {% else %}
+          <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+            <img src="{% static 'image/sadface.png' %}" alt="Sad face" class="w-40 h-40 mb-6"/>
+            <p class="text-center text-gray-600 text-xl mt-4">Belum ada produk yang ditemukan</p>
+          </div>
+        {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock content %}
