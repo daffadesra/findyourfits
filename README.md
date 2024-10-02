@@ -234,7 +234,8 @@ def  sell_product_entry(request):
 > Setelah menyelesaikan ketiga step ini, maka checklist pertama yaitu membuat input form untuk menambahkan objek sudah selesai dan bisa dijalankan.
 >
 **Step 4: Membuat Fungsi untuk Mengembalikan Data dalam Bentuk XML, JSON, XML by ID, dan JSON by ID beserta routing URL untuk masing-masing fungsi.**
-10. Pertama-tama, saya membuka berkas `views.py` dan melakukan import modul `HttpResponse` dan `Serializer` pada bagian atas seperti berikut: 
+
+1. Pertama-tama, saya membuka berkas `views.py` dan melakukan import modul `HttpResponse` dan `Serializer` pada bagian atas seperti berikut: 
 	```
 	from django.http import HttpResponse  
 	from django.core import serializers
@@ -466,3 +467,220 @@ Untuk menghubungkan model `ProductEntry` dengan `User`, berikut adalah langkah-l
 		}
 	```
 
+# **TUGAS 5**
+## 1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+Jika suatu elemen HTML memiliki beberapa CSS selector yang berlaku, maka urutan prioritas atau specificity dalam pengambilan selector ditentukan oleh specificity score dan aturan berikut (dari yang paling diutamakan):
+1. **Inline Styles**
+Inline Styles adalah penggunaan css yang digunakan untuk menerapkan styling untuk satu elemen. Selector ini memiliki prioritas paling tinggi. Contoh penggunaan:
+	```
+	<div style="color: red;></div>
+	```
+2. **ID Selector**
+ID selector adalah selector digunakan untuk memberikan style berdasarkan ID. Contoh penggunaan:
+	```
+	#header { 
+	color: blue; 
+	font-size: 16px; 
+	}
+	```
+3. **Class, Pseudo-class, dan Attribute Selector**
+**Class selector** adalah selector yang menargetkan elemen berdasarkan class. Contoh penerapan:
+	```
+	.highlight { 
+		background-color: yellow; 
+		font-weight: bold; 
+	}
+	```
+	 **Pseudo-class selector** adalah selector yang menargetkan elemen berdasarkan kondisi atau interaksi tertentu.
+	 ```
+	 a:hover { 
+		 color: red;
+	 }
+	 ```
+	 **Attribute selector** adalah selector yang menargetkan elemen berdasarkan atribut HTML dan nilainya. Contoh penerapan:
+	```
+	input[type="text"] {
+		border: 1px 
+		solid blue;
+	}
+	```
+4. Element dan Pseudo-element Selector
+Element dan Pseudo-Element selector adalah selector yang menargetkan elemen berdasarkan nama elemen HTML  (seperti `div`, `p`) atau pseudo-elemen  (seperti `::before`, `::after`). Contoh penerapan:
+	```
+	p { 
+		font-size: 16px; 
+	}
+	```
+	Selain urutan prioritas di atas, kita bisa menghitung specificity suatu selector. Untuk menghitungnya,  kita bisa menggunakan aturan berikut:
+	* Mulai value dari 0.
+	* Tambahkan 1000 setiap Inline Style
+	* Tambahkan 100 setiap ID value
+	* Tambahkan 10 setiap class atau pseudo-class value
+	* Tambahkan 1 setiap element atau pseudo element selector.
+	* Aturan specificity bisa dioverride menggunakan `!important`
+
+	Selector yang memiliki value tertinggi akan digunakan. Jika specificitynya sama, maka yang ditulis paling akhir akan dipilih.
+
+## 2. Mengapa  _responsive design_  menjadi konsep yang penting dalam pengembangan aplikasi  _web_? Berikan contoh aplikasi yang sudah dan belum menerapkan  _responsive design_!
+  
+** RWD atau responsive web design** adalah pendekatan dalam pengembangan web yang membuat website dapat menyesuaikan tampilannya di berbagai jenis layar dan ukuran perangkat. **Tujuan utama RWD** adalah memastikan konten dan elemen website mudah dibaca sekaligus dinavigasi tanpa perlu terlalu sering men-scroll halaman, baik saat diakses melalui desktop, tablet, maupun smartphone.
+
+Pendekatan responsive design penting dalam web development karena beberapa hal berikut:
+* Pengalaman User: Dengan responsive design, user akan memiliki pengalaman yang optimal dan konsisten dalam semua perangkat sehingga navigasi menjadi lebih nyaman. Hal ini dapat meningkatkan kepuasan user dalam menggunakan web.
+* SEO: Website yang responsif berpotensi untuk memiliki prioritas lebih tinggi dalam ranking hasil pencarian, misalnya pada Google, terutama pada mobile.
+* Efisiensi Biaya dan Waktu: Dengan menggunakan responsive design, maka pengembang tidak perlu mengelola website secara terpisah untuk desktop dan mobile, melainkan mengelola satu website yang bapat disesuaikan dengan semua perangkat sehingga mengurangi waktu dan biaya maintenance.
+
+Beberapa contoh aplikasi yang sudah menerapkan responsive design diantaranya adalah **Tokopedia, Shopee, dan YouTube**. Aplikasi-aplikasi tersebut dapat dibuka baik melalui web pada mobile ataupun desktop.
+
+Beberapa contoh aplikasi yang tidak menerapkan responsive design biasanya adalah aplikasi yang sudah outdated dan tidak diupdate. Aplikasi yang tidak menerapkan responsive design sudah jarang ditemukan. Contoh website yang tidak memiliki responsive design dapat diakses dengan link berikut: 
+https://dequeuniversity.com/library/responsive/1-non-responsive
+
+## 3. Jelaskan perbedaan antara  _margin_,  _border_, dan  _padding_, serta cara untuk mengimplementasikan ketiga hal tersebut!
+Dalam CSS, margin, border, dan padding adalah tiga properti yang digunakan untuk mengatur ruang di sekitar elemen HTML. Ketiganya memiliki fungsi yang berbeda.
+1. Margin: Margin adalah ruang kosong di luar elemen HTML. Margin digunakan untuk memberikan jarak antara elemen satu dengan elemen lainnya. Contoh implementasi:
+	```
+	.element {
+	    margin: 30px;
+	}
+	```
+2. Border: Border adalah garis yang mengelilingi suatu elemen HTML. Border berada diantara padding dan margin. Border bisa mempengaruhi tinggi dan lebar elemen. Digunakan untuk membuat outline atau kotak disekitar elemen. Contoh implementasi:
+	```
+	.element {
+		border: 5px solid green;
+	}
+	```
+3. Padding: Padding adalah ruang kosong di dalam elemen HTML yang berada diantara konten (seperti teks atau gambar) dengan border elemen tersebut. Padding memberikan ruang kosong antara konten dengan border elemen. Contoh implementasi:
+	```
+	.element {
+		padding: 20px;
+	}
+	```
+
+## 4. Jelaskan konsep  _flex box_  dan  _grid layout_  beserta kegunaannya!
+1. Flexbox (Flexible Box) Layout
+Flexbox adalah model tata letak satu dimensi yang dirancang untuk mengelola tata letak di satu baris atau di satu kolom pada satu waktu. Flexbox mengatur flex items di dalam flex container secara fleksibel dengan memungkinkan penyesuaian ukuran, posisi, dan distribusi ruang antar elemen secara dinamis dan responsif.
+Fungsi utama flexbox:
+* Memungkinkan pengaturan elemen secara vertikal dan horizontal di dalam container
+* Dapat secara otomatis mendistribusikan ruang kosong antar elemen dan mengatur lebar elemen di dalam flex box berdasarkan ukuran/proporsi yang diinginkan
+* Memungkinkan pengaturan tampilan pada berbagai ukuran layar.
+
+	Contoh implementasi:
+	```
+	.flex-container {
+		display: flex; 
+		justify-content: space-between;  
+		align-items: center; 
+		height: 200px; 
+		background-color: lightgray;
+	}
+	.flex-item { 
+		background-color: lightcoral; 
+		padding: 20px; 
+		margin: 5px; 
+		flex: 1;
+	}
+	```
+2. Grid Layout
+Grid layout adalah sistem tata letak dua dimensi yang memungkinkan penempatan elemen dalam baris dan kolom secara bersamaan. Grid layout memungkinkan kita untuk membuat tata letak dengan kontrol yang lebih besar terhadap posisi elemen.
+Fungsi utama grid layout:
+* Mengatur tata letak elemen-elemen di dalam sebuah grid, baik secara vertikal ataupun horizontal
+* Membantu membuat grid responsif yang berubah ukuran sesuai dengan ukuran layar
+* Memberikan kontrol penuh atas jumlah baris dan kolom, dan ukuran masing-masing baris dan kolom tersebut.
+
+	Contoh implementasi:
+	```
+	.grid-container { 
+		display: grid; 
+		grid-template-columns: 
+		auto auto auto; gap: 10px; 
+		background-color: lightgray; 
+		padding: 10px; 
+	} 
+	.grid-item { 
+		background-color: lightcoral; 
+		padding: 20px; 
+		text-align: center; 
+	}
+	```
+Flexbox dan grid layout dapat digunakan sesuai dengan kebutuhan. Jika ingin membuat layout satu dimensi dan mendistribusikan elemen secara rata, maka kita bisa menggunakan flexbox. Sedangkan jika kita ingin mengatur layout dua dimensi dengan kontrol yang lebih spesifik, kita bisa menggunakan grid layout.
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan  _checklist_  di atas secara  _step-by-step_  (bukan hanya sekadar mengikuti tutorial)!
+### 1. Mengimplementasi fungsi hapus dan tambah product
+Berikut adalah implementasi yang saya lakukan untuk membuat fungsi hapus dan tambah product:
+Pada `views.py`:
+Menambahkan untuk mengimplementasikan fungsi `edit_product` dan `hapus_product`
+```
+def edit_product(request, id):
+	product  =  ProductEntry.objects.get(pk  =  id)
+	form  =  ProductEntryForm(request.POST or  None, instance=product)
+	if  form.is_valid() and  request.method ==  "POST":
+		form.save()
+		return  HttpResponseRedirect(reverse('main:show_main'))
+	context  = {'form': form}
+	return  render(request, "edit_product.html", context)
+
+def hapus_product(request, id):
+	product  =  ProductEntry.objects.get(pk  =  id)
+	product.delete()
+	return  HttpResponseRedirect(reverse('main:show_main'))
+```
+Pada `urls.py`:
+Menambahkan url routing untuk fungsi `edit_product` dan `hapus_product`
+```
+from  main.views  import  ..., edit_product, hapus_product
+
+url_patterns = [
+	...
+	path('edit_product/<uuid:id>', edit_product, name='edit_product'),
+	path('delete/<uuid:id>', hapus_product, name='hapus_product')
+]
+```
+### 2. Kustomisasi halaman login
+<p align="center">
+	<img width="1797" alt="image" src="https://github.com/user-attachments/assets/ca537aab-0e8d-4a0c-9f73-36a8ef21edd6">
+	<img width="493" alt="image" src="https://github.com/user-attachments/assets/a17afbb8-c654-4187-9a79-47812dda142c">
+</p>
+Untuk mengimplementasikan login page di atas, saya menggunakan Tailwind CSS untuk styling dan layouting. Terdapat beberapa elemen yang saya tambahkan, yaitu:
+
+* Background berwarna cyan gradasi
+* Container putih dan rounded
+* Welcome message
+* Styling untuk input
+* Tombol login
+* Tombol registrasi
+
+### 3. Kustomisasi halaman register
+<p align="center">
+	<img width="490" alt="image" src="https://github.com/user-attachments/assets/5299b409-4c69-4892-85f7-1245457efec6">
+	<img width="1794" alt="image" src="https://github.com/user-attachments/assets/5c6f206f-590b-40e3-953d-72d563fa21ff">
+</p>
+Pada halaman register, yang saya tambahkan mirip seperti pada login page. Perbedaan hanya terletak pada header, field, button daftar dan tombol login.
+
+### 4. Kustomisasi halaman tambah product dan edit product
+<p align="center">
+	<img width="1796" alt="image" src="https://github.com/user-attachments/assets/b0cb5bac-1cb6-4ba8-bca0-2add754b95e1">
+	<img width="1795" alt="image" src="https://github.com/user-attachments/assets/6fa47dd6-0b72-4c35-a85f-767e0a58f69b">
+	<img width="510" alt="image" src="https://github.com/user-attachments/assets/d52d9434-d104-4e91-afb5-13a133773979">
+	<img width="508" alt="image" src="https://github.com/user-attachments/assets/577c6d8b-3908-4d1e-b298-db798b89be44">
+</p>
+Untuk mengimplementasikan halaman tambah produk dan edit deskripsi produk, terdapat beberapa hal yang saya lakukan:
+
+* Menambahkan navbar
+* Memnambahkan container untuk tempat fields dari form
+* Membuat header sesuai dengan nama form (Form Tambah Produk atau Edit Deskripsi Produk)
+* Melakukan styling untuk button
+* Membuat warna gradasi untuk header dan container form
+* Menambahkan placeholder untuk setiap fields
+
+### 5. Kustomisasi homepage dengan daftar product dan membuat navbar
+<img width="509" alt="image" src="https://github.com/user-attachments/assets/451a3508-aa4f-4c7f-9898-5e97495684a2">
+<img width="511" alt="image" src="https://github.com/user-attachments/assets/a0732e6e-f280-4ebc-bb7c-5b373d697b7d">
+<img width="1798" alt="image" src="https://github.com/user-attachments/assets/7c77864a-906d-4912-8e0f-7f2ff7060045">
+<img width="1799" alt="image" src="https://github.com/user-attachments/assets/5c2344be-32ac-4cb7-9721-66336288f096">
+
+Untuk mengimplementasikan desain homepage did atas, terdapat beberapa hal yang saya tambahkan:
+
+* Card untuk container data pengguna dan last login
+* Container untuk list produk yang berisi card_product.html dari tiap produk yang dimiliki pengguna
+* Card product yang berisi attribut dari produk dan tombol edit dan hapus produk
+* Navbar responsif yang bisa digunakan untuk masuk ke halaman homepage atau tambah produk.
+* Semua desain bersifat responsif sehingga dapat menyesuaikan dengan ukuran layar dari pengguna
