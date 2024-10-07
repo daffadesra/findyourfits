@@ -12,4 +12,3 @@ class ProductEntry(models.Model):
     stock = models.IntegerField() # tambahan
     condition = models.CharField(max_length=30) # used or new
     description = models.TextField() # tambahan
-    date_added = models.DateTimeField(auto_now_add=True) # tanggal dibuat

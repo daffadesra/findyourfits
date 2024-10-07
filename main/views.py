@@ -15,20 +15,19 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
-
-
+# Tugas 6
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
 
 # Create your views here.
 @login_required(login_url='/login')
 def show_main(request):
-    product_entries = ProductEntry.objects.filter(user=request.user)
     context = {
         'user_name': request.user.username,
         'name': 'Daffa Desra Hastiar',
         'npm': '2306165490',
         'class': 'PBP C',
-        'product_entries': product_entries,
         'last_login': request.COOKIES['last_login'],
     }
 
@@ -46,11 +45,11 @@ def sell_product_entry(request):
     return render(request, "sell_product_entry.html", context)
 
 def show_xml(request):
-    data = ProductEntry.objects.all()
+    data = ProductEntry.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_json(request):
-    data = ProductEntry.objects.all()
+    data = ProductEntry.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_xml_by_id(request, id):
@@ -109,3 +108,23 @@ def hapus_product(request, id):
     product = ProductEntry.objects.get(pk = id)
     product.delete()
     return HttpResponseRedirect(reverse('main:show_main'))
+
+# Tugas 6
+@csrf_exempt
+@require_POST
+def add_product_ajax(request): 
+    name = strip_tags(request.POST.get("name"))
+    price = request.POST.get("price")
+    stock = request.POST.get("stock")
+    condition = strip_tags(request.POST.get("condition"))
+    description = strip_tags(request.POST.get("description"))
+    user = request.user
+
+    new_product = ProductEntry(
+        name=name, price=price,
+        stock=stock, condition=condition,
+        description=description, user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)

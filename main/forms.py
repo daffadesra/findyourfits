@@ -1,5 +1,8 @@
 from django.forms import ModelForm
 from main.models import ProductEntry
+from django.utils.html import strip_tags
+
+
 
 class ProductEntryForm(ModelForm):
     class Meta:
@@ -34,3 +37,15 @@ class ProductEntryForm(ModelForm):
             'placeholder': 'Masukkan deskripsi produk',
             'rows': '4'
         })
+        
+    def clean_name(self):
+        name = self.cleaned_data["name"]
+        return strip_tags(name)
+
+    def clean_condition(self):
+        condition = self.cleaned_data["condition"]
+        return strip_tags(condition)
+    
+    def clean_description(self):
+        description = self.cleaned_data["description"]
+        return strip_tags(description)
