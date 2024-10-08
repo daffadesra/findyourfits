@@ -684,3 +684,152 @@ Untuk mengimplementasikan desain homepage did atas, terdapat beberapa hal yang s
 * Card product yang berisi attribut dari produk dan tombol edit dan hapus produk
 * Navbar responsif yang bisa digunakan untuk masuk ke halaman homepage atau tambah produk.
 * Semua desain bersifat responsif sehingga dapat menyesuaikan dengan ukuran layar dari pengguna
+
+# Tugas 6
+## 1. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+* **Interaktivitas:** JavaScript memungkinkan kita untuk membuat elemen web yang interaktif, misalnya seperti validasi form atau perubahan halaman tanpa perlu refresh page (AJAX)
+* **Pengembangan Frontend yang Lebih Advanced:** Dengan JavaScript, kita bisa membuat elemen visual seperti slider, popup, animasi, dan efek transisi yang lebih halus sehingga aplikasi lebih menarik.
+* **Fitur Ajax:** Fitur AJAX pada JavaScript dapat digunakan untuk melakukan pengambilan data dari server tanpa perlu me-refresh halaman sehingga pengalaman pengguna akan terasa lebih _seamlelss_.
+* **Peningkatan User Experience:** JavaScript dapat digunakan untuk memberikan feedback langsung ke pengguna ketika terjadi kejadian seperti pengisian form yang salah, highlight elemen tertentu jika terjadi interaksi, dan notifikasi saat terjadi kesalahan.
+* **Bekerja dengan Backend Asynchronous:** JavaScript dapat digunakan untuk melayani operasi yang bersifat asinkron, misalnya komunikasi dengan server API. Hal ini membantu aplikasi untuk menerima permintaan yang banyak secara persamaan dengan lebih efisien.
+## 2. Jelaskan fungsi dari penggunaan  `await`  ketika kita menggunakan  `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan  `await`?
+Berdasarkan artikel dari GeeksforGeeks, **`fetch()`** digunakan untuk melakukan permintaan HTTP ke server dan mengembalikan **Promise**, yang berarti operasi ini berjalan secara **asinkron**. Berikut ini fungsi dari penggunaan **`await`** dan apa yang terjadi jika kita tidak menggunakannya:
+
+-   **Fungsi `await`**: Ketika kita menggunakan **`await`** di depan **`fetch()`**, kita memberitahu JavaScript untuk "menunggu" hingga permintaan HTTP yang dilakukan oleh **`fetch()`** selesai, sebelum mengeksekusi baris kode selanjutnya. Dengan **`await`**, kita bisa menulis kode seolah-olah operasi tersebut berjalan secara sinkron, sehingga lebih mudah dibaca dan dipahami.
+    
+    Contoh penggunaan:
+    ```
+    async function fetchData() {
+      let response = await fetch('https://api.example.com/data');
+      let data = await response.json();
+      console.log(data);
+    }
+    ```
+    Di sini, **`await`** memastikan bahwa `response` hanya akan diisi setelah permintaan **`fetch()`** selesai, dan kemudian data JSON akan diproses.
+    
+-   **Tanpa `await`**: Jika kita tidak menggunakan **`await`**, permintaan **`fetch()`** akan berjalan secara **asinkron** dan kode di bawahnya akan langsung dieksekusi sebelum permintaan selesai. Hasilnya, kita mungkin mencoba mengakses **response** yang belum selesai diterima, sehingga kita tidak akan mendapatkan data yang diharapkan, melainkan hanya mendapatkan sebuah **Promise** yang belum ter-resolve.
+    
+    Contoh tanpa **`await`**:
+	   ```
+    function fetchData() {
+	      let response = fetch('https://api.example.com/data');
+	      console.log(response);  // Akan mencetak Promise, bukan data yang sebenarnya
+    }
+	```   
+    Tanpa **`await`**, `console.log(response)` akan menampilkan objek **Promise** karena JavaScript tidak menunggu permintaan **`fetch()`** selesai. Kita tidak bisa langsung mengakses data yang diambil.
+    
+
+**Kesimpulan**: **`await`** memastikan bahwa kode hanya berjalan setelah permintaan **`fetch()`** selesai. Tanpa **`await`**, kita tidak bisa menggunakan hasil dari **`fetch()`** dengan benar karena permintaan asinkron tersebut belum selesai ketika kode mencoba mengakses hasilnya .
+## 3. Mengapa kita perlu menggunakan  _decorator_  `csrf_exempt`  pada  _view_  yang akan digunakan untuk AJAX  `POST`?
+-   **CSRF (Cross-Site Request Forgery)** adalah jenis serangan di mana penyerang mencoba untuk membuat pengguna melakukan aksi tertentu di situs web tanpa sepengetahuannya. Biasanya, Django secara default akan memeriksa token CSRF untuk setiap permintaan POST yang datang dari form, untuk memastikan bahwa permintaan tersebut sah.
+-   Ketika kita menggunakan **AJAX POST**, seringkali kita tidak menyertakan token CSRF secara manual, atau pada beberapa kasus, mekanisme AJAX tidak mengirim token CSRF dengan benar. Akibatnya, permintaan akan ditolak oleh server karena dianggap tidak aman.
+-   **`csrf_exempt`** digunakan untuk mengabaikan pemeriksaan CSRF pada view tertentu. Namun, ini harus digunakan dengan hati-hati, hanya pada endpoint yang benar-benar aman, karena membuka celah keamanan jika endpoint tidak dilindungi dengan baik.
+## 4. Pada tutorial PBP minggu ini, pembersihan data  _input_  pengguna dilakukan di belakang (_backend_) juga. Mengapa hal tersebut tidak dilakukan di  _frontend_  saja?
+Pembersihan data di **backend** (server) dilakukan karena beberapa alasan penting:
+
+1.  **Keamanan**: Validasi di **frontend** (browser) bisa diabaikan atau dimanipulasi oleh pengguna. Misalnya, pengguna bisa menonaktifkan JavaScript dan melewati validasi tersebut. Jadi, backend harus memastikan bahwa data benar-benar aman.
+2.  **Melindungi dari serangan**: Backend melindungi dari serangan berbahaya seperti **SQL Injection** atau **XSS**. Ini terjadi jika pengguna memasukkan data berbahaya, dan tanpa pembersihan, bisa menyebabkan masalah besar.
+3.  **Kepastian data**: Dengan pembersihan di backend, kita memastikan data yang masuk ke server selalu benar dan sesuai standar, tanpa tergantung pada apakah pengguna menjalankan validasi di browser atau tidak.
+  
+Jadi, meskipun frontend bisa melakukan pembersihan, backend tetap harus melakukannya untuk menjaga keamanan dan keakuratan data.
+
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan  _checklist_  di atas secara  _step-by-step_  (bukan hanya sekadar mengikuti tutorial)!
+### 1. Membuat fungsi `add_product_ajax` pada `views.py`
+Untuk mengimplementasi langkah ini, yang saya lakukan adalah membuat fungsi `add_product_ajax` pada `views.py` yang memiliki atribut `csrf_exempt` dan `require_POST`. Berikut adalah implementasi yang saya lakukan:
+```
+@csrf_exempt
+@require_POST
+def add_product_ajax(request): 
+    name = strip_tags(request.POST.get("name"))
+    price = request.POST.get("price")
+    stock = request.POST.get("stock")
+    condition = strip_tags(request.POST.get("condition"))
+    description = strip_tags(request.POST.get("description"))
+    user = request.user
+
+    new_product = ProductEntry(
+        name=name, price=price,
+        stock=stock, condition=condition,
+        description=description, user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)
+```
+### 2. Membuat routing untuk fungsi `add_product_ajax` pada `urls.py`
+Untuk mengimplementasi langkah ini, yang saya lakukan adalah menambahkan path untuk fungsi `add_product_ajax` pada `urls.py`. Berikut adalah implementasi yang saya lakukan:
+```
+from  main.views  import  ..., add_product_ajax
+
+url_patterns = [
+	...
+	path('add-product-ajax/', add_product_ajax, name='add_product_ajax'),
+]
+```
+### 3. Membuat fungsi untuk mengambil data dari form menggunakan fetch() API
+Untuk mengimplementasi langkah ini, ada beberapa langkah yang saya lakukan:
+1. Menghapus `product_entries` dari fungsi `show_main` pada `views.py`
+2. Mengubah fungsi `show_json` dan `show_xml` pada `views.py` sehingga mengembalikan data dari `ProductEntry` sesuai user yang login
+3. Mengubah fungsi untuk menampilkan card product pada `main.html` dan disesuaikan untuk menggunakan fetch() API
+4. Membuat fungsi asinkornus JavaScript `getProductEntries` untuk mengambil data secara asinkronus dari fungsi `show_json`.
+5. Membuat fungsi `refreshProductEntries` untuk mengupdate data product yang ditampilkan pada halaman
+### 4. Membuat modal sebagai form untuk menambahkan produk baru menggunakan AJAX
+Untuk mengimplementasi langkah ini, ada beberapa langkah yang saya lakukan:
+1. Membuat desain modal yang akan ditampilkan untuk menambahkan produk baru pada `main.html`. Berikut adalah tampilan modal yang saya buat:
+<p align="center">
+	<img width="636" alt="image" src="https://github.com/user-attachments/assets/73098c9c-fc63-44c8-a806-b1e6deb0f00c">
+</p>
+
+2. Membuat fungsi `showModal` untuk menampilkan modal
+3. Membuat fungsi `hideModal` untuk menyembunyikan modal
+4. Menambahkan button untuk menambahkan produk baru menggunakan AJAX pada `main.html`
+5. Membuat fungsi `addProduct` untuk menambahkan produk baru ke dalam database dengan AJAX
+6. Membuat event listener `productEntryForm` untuk menambahkan produk baru menggunakan AJAX pada `main.html`.
+7. Membuat event listener `cancelButton` untuk keluar dari modal ketika tombol ditekan dan memanggil fungsi `refreshProductEntries`
+8. Membuat event listener `submitProductEntry` untuk menambahkan produk baru menggunakan AJAX pada `main.html`, dimana fungsi ini akan memanggil fungsi `addProductEntry` dan memanggil fungsi `refreshProductEntries` jika fungsi `addProductEntry` berhasil dijalankan. Selain itu, saya menambahkan validasi form untuk memastikan form tidak kosong. Jika form tidak valid, maka akan ditampilkan pesan error pada modal.
+
+### 5. Membuat fungsi untuk melindungi data dari serangan XSS
+Untuk mengimplementasi langkah ini, saya memanggil fungsi `strip_tags` pada `views.py` untuk menghapus tag HTML dari data yang diinputkan pengguna. Berikut adalah implementasi yang saya lakukan:
+```
+@csrf_exempt
+@require_POST
+def add_product_ajax(request): 
+    name = strip_tags(request.POST.get("name"))
+    price = request.POST.get("price")
+    stock = request.POST.get("stock")
+    condition = strip_tags(request.POST.get("condition"))
+    description = strip_tags(request.POST.get("description"))
+```
+Setelah itu, saya juga memanggil fungsi `strip_tags` pada `forms.py` untuk menghapus tag HTML dari data yang diinputkan pengguna. Berikut adalah implementasi yang saya lakukan:
+```
+class ProductEntryForm(ModelForm):
+	class Meta:
+		...
+    def clean_name(self):
+        name = self.cleaned_data["name"]
+        return strip_tags(name)
+
+    def clean_condition(self):
+        condition = self.cleaned_data["condition"]
+        return strip_tags(condition)
+    
+    def clean_description(self):
+        description = self.cleaned_data["description"]
+        return strip_tags(description)
+```
+### 6. Membersihkan data dengan DOMPurify
+Karena saya sebelumnya melakukan testing XSS dalam product yang saya input, maka terdapat sisa-sisa tag HTML yang tidak terhapus. Oleh karena itu, saya menggunakan DOMPurify untuk membersihkan data dari tag HTML yang tidak terhapus. Berikut adalah implementasi yang saya lakukan:
+1. Pada `main.htnl`, saya menambahkan script `<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+` untuk melakukan purify pada blok meta.
+2. Pada fungsi `refreshProductEntries`, saya menambahkan script untuk melakukan purify pada data yang diambil dari `show_json`. Berikut adalah implementasi yang saya lakukan:
+```
+async function refreshProductEntries() {
+	...
+	 products.forEach((product) => {
+        const name = DOMPurify.sanitize(product.fields.name);
+        const description = DOMPurify.sanitize(product.fields.description);
+        const condition = DOMPurify.sanitize(product.fields.condition);      
+		...
+	 });
+}
+```
